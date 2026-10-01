@@ -44,6 +44,14 @@ STILLNOTE_SUPABASE_ANON_KEY=eyJ... \
 pnpm build:mac
 ```
 
+## Releasing
+
+Releases are built by GitHub Actions (`.github/workflows/release.yml`):
+
+1. Bump `version` in `src-tauri/tauri.conf.json`, `src-tauri/Cargo.toml` and `package.json`.
+2. Commit, then `git tag vX.Y.Z && git push origin main --tags`.
+3. When the workflow finishes, open **Releases**, check the draft, and click **Publish**.
+
 ## Setting up Supabase
 
 1. Create a project at https://supabase.com/dashboard.

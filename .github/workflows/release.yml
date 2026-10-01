@@ -1,0 +1,53 @@
+name: Release
+
+# Push a tag like v0.2.0 to build the universal macOS app and attach it
+# to a draft GitHub release. Review the draft, then click Publish.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm test
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional: bake a Supabase project into the build (repo Settings → Secrets).
+          # STILLNOTE_SUPABASE_URL: ${{ secrets.STILLNOTE_SUPABASE_URL }}
+          # STILLNOTE_SUPABASE_ANON_KEY: ${{ secrets.STILLNOTE_SUPABASE_ANON_KEY }}
+        with:
+          tagName: v__VERSION__
+          releaseName: Stillnote v__VERSION__
+          releaseDraft: true
+          args: --target universal-apple-darwin
+          releaseBody: |
+            Download `Stillnote_<version>_universal.dmg` below. It runs on both Apple Silicon and Intel Macs (macOS 11+).
+
+            **First launch:** the app isn't signed yet, so macOS will block it. Right-click Stillnote in Applications and choose **Open**, then **Open** again.
+            If macOS says the app is damaged, run `xattr -cr /Applications/Stillnote.app` in Terminal and try again.
