@@ -22,6 +22,7 @@ export default function App() {
   const [sync, setSync] = useState<SyncState>({ busy: false, error: null });
   const [reloadToken, setReloadToken] = useState(0);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [confirm, setConfirm] = useState<ConfirmRequest | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -209,6 +210,9 @@ export default function App() {
         e.preventDefault();
         searchRef.current?.focus();
         searchRef.current?.select();
+      } else if (k === "\\") {
+        e.preventDefault();
+        setSidebarOpen((v) => !v);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -225,31 +229,35 @@ export default function App() {
           : (notebooks.find((n) => n.id === view.id)?.name ?? t.notebookFallback);
 
   return (
-    <div className="app">
-      <Sidebar
-        view={view}
-        onView={(v) => {
-          setView(v);
-          setQuery("");
-        }}
-        notebooks={notebooks}
-        tags={tags}
-        onCreateNotebook={(name) =>
-          act(async () => {
-            const nb = await api.createNotebook(name);
-            setView({ kind: "notebook", id: nb.id });
-          })
-        }
-        onRenameNotebook={(id, name) => act(() => api.renameNotebook(id, name))}
-        onDeleteNotebook={deleteNotebook}
-        auth={auth}
-        sync={sync}
-        onSync={runSync}
-        onAccount={() => setAccountOpen(true)}
-      />
+    <div className={sidebarOpen ? "app" : "app sidebar-hidden"}>
+      {sidebarOpen && (
+        <Sidebar
+          view={view}
+          onView={(v) => {
+            setView(v);
+            setQuery("");
+          }}
+          notebooks={notebooks}
+          tags={tags}
+          onCreateNotebook={(name) =>
+            act(async () => {
+              const nb = await api.createNotebook(name);
+              setView({ kind: "notebook", id: nb.id });
+            })
+          }
+          onRenameNotebook={(id, name) => act(() => api.renameNotebook(id, name))}
+          onDeleteNotebook={deleteNotebook}
+          auth={auth}
+          sync={sync}
+          onSync={runSync}
+          onAccount={() => setAccountOpen(true)}
+        />
+      )}
 
       <NoteList
         title={listTitle}
+        sidebarOpen={sidebarOpen}
+        onToggleSidebar={() => setSidebarOpen((v) => !v)}
         notes={notes}
         selectedId={selectedId}
         onSelect={setSelectedId}

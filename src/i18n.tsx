@@ -20,6 +20,8 @@ const en = {
   syncNow: "Sync now",
 
   // note list
+  showSidebar: "Show sidebar (⌘\\)",
+  hideSidebar: "Hide sidebar (⌘\\)",
   newNote: "New note (⌘N)",
   emptyTrash: "Empty",
   search: "Search (⌘F)",
@@ -143,6 +145,8 @@ const vi: Strings = {
   notSynced: "Chưa đồng bộ",
   syncNow: "Đồng bộ ngay",
 
+  showSidebar: "Hiện thanh bên (⌘\\)",
+  hideSidebar: "Ẩn thanh bên (⌘\\)",
   newNote: "Ghi chú mới (⌘N)",
   emptyTrash: "Dọn sạch",
   search: "Tìm kiếm (⌘F)",
