@@ -1,6 +1,6 @@
 [package]
 name = "stillnote"
-version = "0.1.0"
+version = "0.2.0"
 description = "Stillnote — text notes with Supabase sync"
 authors = ["tungdevpro <tungdo21899@gmail.com>"]
 edition = "2021"
