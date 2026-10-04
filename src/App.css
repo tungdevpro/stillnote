@@ -98,6 +98,10 @@ textarea,
   height: 100%;
 }
 
+.app.sidebar-hidden {
+  grid-template-columns: 300px minmax(0, 1fr);
+}
+
 /* ---------- sidebar ---------- */
 
 .sidebar {
@@ -422,6 +426,8 @@ textarea,
 }
 
 .list-title {
+  flex: 1;
+  min-width: 0;
   margin: 0;
   overflow: hidden;
   font: 600 20px/1.2 var(--font-serif);
@@ -963,6 +969,10 @@ textarea,
 @media (max-width: 900px) {
   .app {
     grid-template-columns: 190px 260px minmax(0, 1fr);
+  }
+
+  .app.sidebar-hidden {
+    grid-template-columns: 260px minmax(0, 1fr);
   }
 
   .editor-page {

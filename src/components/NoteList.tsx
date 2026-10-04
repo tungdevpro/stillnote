@@ -1,11 +1,13 @@
 import { RefObject } from "react";
-import { Pin, Search, SquarePen, X } from "lucide-react";
+import { PanelLeft, Pin, Search, SquarePen, X } from "lucide-react";
 import type { NoteSummary } from "../api";
 import { shortDate } from "../format";
 import { useI18n } from "../i18n";
 
 interface NoteListProps {
   title: string;
+  sidebarOpen: boolean;
+  onToggleSidebar: () => void;
   notes: NoteSummary[];
   selectedId: string | null;
   onSelect: (id: string) => void;
@@ -25,6 +27,13 @@ export function NoteList(props: NoteListProps) {
     <section className="note-list">
       <header className="list-head" data-tauri-drag-region>
         <div className="list-title-row" data-tauri-drag-region>
+          <button
+            className={props.sidebarOpen ? "icon-btn" : "icon-btn is-on"}
+            title={props.sidebarOpen ? t.hideSidebar : t.showSidebar}
+            onClick={props.onToggleSidebar}
+          >
+            <PanelLeft size={16} />
+          </button>
           <h1 className="list-title" data-tauri-drag-region>
             {props.title}
           </h1>
